@@ -129,4 +129,4 @@ async def tic(interaction):
     await interaction.send("Tic Tac Toe: X goes first", view=TicTacToe())
 
 
-bot.run("token")
+bot.run("YOUR_DISCORD_BOT_TOKEN")
