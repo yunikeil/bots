@@ -1,5 +1,6 @@
 import subprocess
 import os
+import sys
 import asyncio
 
 import aeval
@@ -8,7 +9,12 @@ from discord import app_commands
 from discord.ext import commands
 
 import configuration
+from core.database import init_models
+from models.news import News
 
+#script_dir = os.path.dirname(os.path.abspath(__file__))
+#sys.path.append(os.path.join(script_dir, "models"))
+#sys.path.append(os.path.join(script_dir, "services"))
 
 class MyCustomTranslator(app_commands.Translator):
     async def load(self):
@@ -86,6 +92,7 @@ class Bot(commands.Bot):
 
     async def setup_hook(self):
         await self.tree.set_translator(MyCustomTranslator())
+        await init_models(drop_all=False)
         if self.cogs_on_start:
             [await self.load_extension(f"cogs.{cog}") for cog in self.cogs_on_start]
         self.tree.copy_global_to(guild=discord.Object(id=1141373361063198822))
@@ -98,6 +105,21 @@ class Bot(commands.Bot):
             self.OWNERS.append(application_info.owner.id)
             self.EVAL_OWNER.append(application_info.owner.id)
             self.DATA["bot-started"] = True
+            await self.change_presence(activity=discord.Activity(
+                application_id=1113954512298836071,
+                name='War Thunder',
+                type=discord.ActivityType.playing,
+                state="Playing Solo",
+                details="Air RB",
+                timestamps={
+                    "start": 1577829661
+                },
+                party={
+                    "id": "ae488379-351d-4a4f-ad32-2b9b01c91657",
+                    "size": [1, 4]
+                },
+            ))
+
 
 
 intents = discord.Intents.all()
