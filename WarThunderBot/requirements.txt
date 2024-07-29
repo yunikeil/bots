@@ -1,0 +1,4 @@
+requests
+discord
+aeval
+SQLAlchemy
